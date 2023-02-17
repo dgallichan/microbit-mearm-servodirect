@@ -1,3 +1,14 @@
+radio.onReceivedValue(function (name, value) {
+    if (name == "speedBase") {
+        speedBase = Math.map(value, -90, 90, -1, 1)
+    } else if (name == "speedLeft") {
+        speedLeft = Math.map(value, -90, 90, -1, 1)
+    } else if (name == "speedRight") {
+        speedRight = Math.map(value, -90, 90, -1, 1)
+    } else if (name == "speedGrip") {
+        speedGrip = Math.map(value, -90, 90, -1, 1)
+    }
+})
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     basic.showLeds(`
         # # # # #
@@ -29,6 +40,15 @@ let servoGrip_target = 0
 let servoRight_target = 0
 let servoLeft_target = 0
 let servoBase_target = 0
+let speedBase = 0
+let speedLeft = 0
+let speedRight = 0
+let speedGrip = 0
+speedGrip = 0
+speedRight = 0
+speedLeft = 0
+speedBase = 0
+radio.setGroup(250)
 basic.showLeds(`
     # # . . .
     . . # # #
@@ -44,7 +64,7 @@ let servoBase = 90
 let servoLeft = 90
 let servoRight = 90
 let servoGrip = 135
-smoothFactor = 0.2
+smoothFactor = 0.5
 basic.forever(function () {
     servoBase_target = Math.constrain(servoBase_target, 0, 180)
     servoLeft_target = Math.constrain(servoLeft_target, 15, 165)
@@ -54,41 +74,31 @@ basic.forever(function () {
     servoLeft = smoothFactor * servoLeft + (1 - smoothFactor) * servoLeft_target
     servoRight = smoothFactor * servoRight + (1 - smoothFactor) * servoRight_target
     servoGrip = smoothFactor * servoGrip + (1 - smoothFactor) * servoGrip_target
-    if (Math.abs(servoBase - servoBase_target) > 3) {
-        pins.servoWritePin(AnalogPin.P13, servoBase)
-    } else {
-        pins.digitalWritePin(DigitalPin.P13, 0)
-    }
-    if (Math.abs(servoLeft - servoLeft_target) > 3) {
-        pins.servoWritePin(AnalogPin.P14, servoLeft)
-    } else {
-        pins.digitalWritePin(DigitalPin.P14, 0)
-    }
-    if (Math.abs(servoRight - servoRight_target) > 3) {
-        pins.servoWritePin(AnalogPin.P15, servoRight)
-    } else {
-        pins.digitalWritePin(DigitalPin.P15, 0)
-    }
-    if (Math.abs(servoGrip - servoGrip_target) > 3) {
-        pins.servoWritePin(AnalogPin.P16, servoGrip)
-    } else {
-        pins.digitalWritePin(DigitalPin.P16, 0)
-    }
+    pins.servoWritePin(AnalogPin.P13, servoBase)
+    pins.servoWritePin(AnalogPin.P14, servoLeft)
+    pins.servoWritePin(AnalogPin.P15, servoRight)
+    pins.servoWritePin(AnalogPin.P16, servoGrip)
 })
 basic.forever(function () {
-    thisVal = (pins.analogReadPin(AnalogPin.P0) - 507) / 1024
-    if (Math.abs(thisVal) > 0.1) {
-        servoBase_target = servoBase_target + 1 * thisVal
+    if (input.buttonIsPressed(Button.A)) {
+        thisVal = (pins.analogReadPin(AnalogPin.P0) - 507) / 512
+        speedBase = 2 * thisVal
+        thisVal = (pins.analogReadPin(AnalogPin.P1) - 507) / 512
+        speedLeft = 2 * thisVal
+        thisVal = (pins.analogReadPin(AnalogPin.P2) - 507) / 512
+        speedRight = 2 * thisVal
+        speedGrip = 0
+    } else if (input.buttonIsPressed(Button.B)) {
+        thisVal = (pins.analogReadPin(AnalogPin.P0) - 507) / 512
+        speedGrip = 2 * thisVal
+        speedBase = 0
+        speedLeft = 0
+        speedRight = 0
+    } else {
+    	
     }
-    thisVal = (pins.analogReadPin(AnalogPin.P1) - 507) / 1024
-    if (Math.abs(thisVal) > 0.1) {
-        servoRight_target = servoRight_target + 1 * thisVal
-        servoLeft_target = servoLeft_target + 1 * thisVal
-    }
-    thisVal = (pins.analogReadPin(AnalogPin.P2) - 507) / 1024
-    if (Math.abs(thisVal) > 0.1) {
-        servoGrip_target = servoGrip_target + 1 * thisVal
-    }
-    serial.writeValue("x.val", servoBase)
-    serial.writeValue("x.target", servoBase_target)
+    servoBase_target = servoBase_target + speedBase
+    servoLeft_target = servoLeft_target + speedLeft
+    servoRight_target = servoRight_target + speedRight
+    servoGrip_target = servoGrip_target + speedGrip
 })
