@@ -1,11 +1,11 @@
 radio.onReceivedValue(function (name, value) {
-    if (name == "speedBase") {
+    if (name == "goBase") {
         speedBase = Math.map(value, -90, 90, -1, 1)
-    } else if (name == "speedLeft") {
+    } else if (name == "goLeft") {
         speedLeft = Math.map(value, -90, 90, -1, 1)
-    } else if (name == "speedRight") {
+    } else if (name == "goRight") {
         speedRight = Math.map(value, -90, 90, -1, 1)
-    } else if (name == "speedGrip") {
+    } else if (name == "goGrip") {
         speedGrip = Math.map(value, -90, 90, -1, 1)
     }
 })
