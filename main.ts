@@ -1,12 +1,12 @@
 radio.onReceivedValue(function (name, value) {
     if (name == "goBase") {
-        speedBase = Math.map(value, -90, 90, -1, 1)
+        speedBase = Math.map(value, -90, 90, -2, 2)
     } else if (name == "goLeft") {
-        speedLeft = Math.map(value, -90, 90, -1, 1)
+        speedLeft = Math.map(value, -90, 90, -2, 2)
     } else if (name == "goRight") {
-        speedRight = Math.map(value, -90, 90, -1, 1)
+        speedRight = Math.map(value, -90, 90, -2, 2)
     } else if (name == "goGrip") {
-        speedGrip = Math.map(value, -90, 90, -1, 1)
+        speedGrip = Math.map(value, -90, 90, -2, 2)
     }
 })
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
