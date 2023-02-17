@@ -66,7 +66,7 @@ let servoRight = 90
 let servoGrip = 135
 smoothFactor = 0.5
 basic.forever(function () {
-    servoBase_target = Math.constrain(servoBase_target, 0, 180)
+    servoBase_target = Math.constrain(servoBase_target, 45, 135)
     servoLeft_target = Math.constrain(servoLeft_target, 15, 165)
     servoRight_target = Math.constrain(servoRight_target, 0, 180)
     servoGrip_target = Math.constrain(servoGrip_target, 90, 180)
