@@ -77,7 +77,7 @@ smoothFactor = 0.5
 basic.forever(function () {
     if (!(isIdle)) {
         servoBase_target = Math.constrain(servoBase_target, 45, 135)
-        servoLeft_target = Math.constrain(servoLeft_target, 50, 160)
+        servoLeft_target = Math.constrain(servoLeft_target, 35, 155)
         servoRight_target = Math.constrain(servoRight_target, 45, 160)
         servoGrip_target = Math.constrain(servoGrip_target, 90, 180)
         servoBase = smoothFactor * servoBase + (1 - smoothFactor) * servoBase_target
